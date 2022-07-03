@@ -1,69 +1,45 @@
-# ANSIBLE PROJECT
+# CI/CD WITH AZURE DEVOPS
 
-<img src="./images/ansible.gif" width="500"/>
+<img src="./images/cicd-pipeline.gif" width="700"/>
 
 # Introduction
 
-Previously created a [Terraform template](https://github.com/idanhoro/Terraform-project) that automates the process of provisioning our infrastructure in the Cloud.
-In this project we are going to use in order to automate the whole configuration of the servers and
-deploy our NodeWeightTracker application using Configuration Management practices.
+In this project, we used Terraform to create the infrastructure, as explained here:
+[Terraform ](https://github.com/idanhoro/terrfaform-project-adv)
+
+Ansible was used to configure the app servers as explained here:
+[Ansible ](https://github.com/idanhoro/ansible-CD-project)
+
+In the previous projects we have been using Terraform to provision the infrastructure of 
+our application and we are using Ansible to automate the deployment process,
+which is quite respectable but not enough. In this project we will finish automating
+the entire process by using CI/CD methodologies to orchestrate the use of both
+tools and deploy the changes made to the code continuously and automatically.
 
 # Project Overview
 
-In this project i wrote  an Ansible playbooks to configure the servers created by [Terraform template](https://github.com/idanhoro/Terraform-project) and then, install the NodeWeightTracker application including all its dependencies.
-In addition, we are ready to move to production. To achieve this we will need to provision 2 identical environments, one for staging and another for production.
+This week’s project consists of using Azure Pipelines to configure a complete CI/CD pipeline
+for the WeightTracker application that includes building the application and deploying it
+into (an existent) infrastructure. As a bonus we are going to create an additional CI/CD pipeline
+to automate the infrastructure updates when our Terraform code changes.
 
-<img src="./images/project_overview.png" width="700"/>
+<img src="./images/azure-pipelines.png" width="700"/>
 
 # Project Goals
 
-- Use Terraform to provision the infrastructure
-- Use Ansible to deploy the NodeWeightTracker application
-- Create two environments: Staging and Production
-- Both environments must be identical except for the size of the vms (production ones must be larger)
+- Create an Azure DevOps Organization
+- Create a CICD (yaml) / CI (classic) Pipeline using Azure Pipelines (preferably using yaml over Classic)
+- CI pipeline should trigger automatically on every commit
+- Use Azure Artifacts to store your build Artifacts
+- Create a CD Job using Yaml job (yaml) / Azure Release Pipelines (classic)
+- Configure your CD stage to deploy to Staging using Continuous Deployment
+- Configure your CD stage to deploy to Production using Continuous Delivery
 
 # Requirements
 
-- [Terraform template](https://github.com/idanhoro/Terraform-project)
+- [Terraform ](https://github.com/idanhoro/terrfaform-project-adv)
+- [Ansible ](https://github.com/idanhoro/ansible-CD-project)
 - Virtual Machine that will be the Ansible Controller.
 - Free Okta developer account for account registration, login
-- .env file for each environment. (Example at ansible\env_production\Example_env)
-- Inventory file configure, [INI STYLE](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ini_inventory.html) Example:
-```yaml
-[production]
-Production-Server-1 
-      .
-      .
-  
-[production:vars]
-ansible_ssh_host=[[IP/DNS ADRESS]]
-ansible_user=[[The username of ansible VM]]
-
-VM_username=[[Host's username]]
-App_folder=[[Name of the project directory]]
-git_repo_url=[["https://github.com/idanhoro/bootcamp-app.git"]]
-Controller_folder=[[Directory at ansible VM that should run from]]
-env_level=[[Environment level]]
-
-[staging]
-Staging-Server-1
-      .
-      .
-[staging:vars]
-ansible_ssh_host=[[IP/DNS ADRESS]]
-ansible_user=[[The username of ansible VM]]
-VM_username=[[Host's username]]
-App_folder=[[Name of the project directory]]
-git_repo_url=[["https://github.com/idanhoro/bootcamp-app.git"]]
-Controller_folder=[[Directory at ansible VM that should run from]]
-env_level=[[Environment level]]
-```
 
 
-# Running instructions
-Run the follow commands:
-1) ```cd Ansible-project\setup```
-2) ```terraform init```
-3) ```terraform apply```
-4) ``` cd Ansible-project\ansible```
-5) ```ansible-playbook -i Inventory playbook.yml``` (Inventory+.env files required )
